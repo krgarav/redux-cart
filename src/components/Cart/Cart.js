@@ -6,11 +6,12 @@ const Cart = (props) => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const Items = cartItems.map((item) => (
     <CartItem
-      key={item.title}
+      key={item.id}
       item={{
-        title: item.title,
+        id:item.id,
+        title: item.name,
         quantity: item.quantity,
-        total: item.total,
+        total: item.totalPrice,
         price: item.price,
       }}
     />
@@ -19,9 +20,7 @@ const Cart = (props) => {
     <Card className={classes.cart}>
       <h2>Your Shopping Cart</h2>
       <ul>
-        <CartItem
-          item={{ title: "Test Item", quantity: 3, total: 18, price: 6 }}
-        />
+        {Items}
       </ul>
     </Card>
   );

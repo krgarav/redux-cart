@@ -1,23 +1,42 @@
-import { cartAction } from '../../store/cart-reducer';
-import ProductItem from './ProductItem';
-import classes from './Products.module.css';
-import {useDispatch} from "react-redux"
+import ProductItem from "./ProductItem";
+import classes from "./Products.module.css";
+
+const Dummy_products = [
+  {
+    id: "p1",
+    price: 60,
+    title: "My first Book",
+    description: "Best book ever",
+  },
+  {
+    id: "p2",
+    price: 50,
+    title: "My Second Book",
+    description: "Amazing book ever",
+  },
+  {
+    id: "p3",
+    price: 90,
+    title: "My Third Book",
+    description: "Lovely book ever",
+  },
+];
 const Products = (props) => {
-  const dispatch = useDispatch()
-  const onAddHandler =()=>{
-    dispatch(cartAction.addToCart())
-  }
+  const items = Dummy_products.map((product) => {
+    return (
+      <ProductItem
+        key={product.id}
+        id={product.id}
+        title={product.title}
+        price={product.price}
+        description={product.description}
+      />
+    );
+  });
   return (
     <section className={classes.products}>
       <h2>Buy your favorite products</h2>
-      <ul>
-        <ProductItem
-          title='Test'
-          price={6}
-          description='This is a first product - amazing!'
-          onAdd={onAddHandler}
-        />
-      </ul>
+      <ul>{items}</ul>
     </section>
   );
 };
