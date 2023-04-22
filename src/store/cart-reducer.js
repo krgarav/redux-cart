@@ -21,15 +21,15 @@ const cartSlice = createSlice({
         });
       } else {
         // eslint-disable-next-line no-unused-expressions
-        existingItem.quantity++,
-          (existingItem.totalPrice = existingItem.totalPrice + newItem.price);
+        existingItem.quantity++;
+        existingItem.totalPrice = existingItem.totalPrice + newItem.price;
       }
     },
     removeFromCart(state, action) {
       const id = action.payload;
 
       const existingItem = state.cartItems.find((item) => {
-        return item.id == id.id;
+        return item.id === id.id;
       });
       state.totalQuantity--;
 
