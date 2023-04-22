@@ -3,59 +3,29 @@ import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import { useDispatch, useSelector } from "react-redux";
 import { Fragment, useEffect } from "react";
-import { layoutAction } from "./store/layout-reducer";
 import Notification from "./components/Notification/Notification";
+import { fetchCartData, sendCardData } from "./store/cart-action";
 let firstRun = true;
 function App() {
   const show = useSelector((state) => state.layout.show);
-  const cart = useSelector((state) => state.cart.cartItems);
+  const cart = useSelector((state) => state.cart);
   const notification = useSelector((state) => state.layout.notification);
   const dispatch = useDispatch();
-  useEffect(() => {
-    const putData = async () => {
-      dispatch(
-        layoutAction.setNotification({
-          status: "pending",
-          title: "Sending...",
-          message: "Sending Cart Data!",
-        })
-      );
-      const response = await fetch(
-        "https://react-redux-b00f2-default-rtdb.firebaseio.com/cart/.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("data sent failed");
-      }
+  const it = useSelector((state) => state.cart.changed);
 
-    
-      dispatch(
-        layoutAction.setNotification({
-          status: "success",
-          title: "Success!!",
-          message: "Sent cart data successfully!!",
-        })
-      );
-    };
+  useEffect(() => {
+    dispatch(fetchCartData());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (firstRun) {
       firstRun = false;
       return;
     }
-    putData().catch((error) => {
-      dispatch(
-        layoutAction.setNotification({
-          status: "error",
-          title: "Error!!",
-          message: "Sent cart data failed!!",
-        })
-      );
-    });
+
+    if (cart.changed) {
+      dispatch(sendCardData(cart));
+    }
   }, [cart, dispatch]);
   return (
     <Fragment>
